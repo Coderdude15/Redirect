@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>guessanumber.com</title>
+    <link rel="stylesheet" href="style.css">
+    <a href="http://127.0.0.1:5500/index.html"></a>
+    
+    <div id="LinkContainer">
+        <a id="YoutubeLink" href="https://www.youtube.com/shorts/klxum9Rvwwg"></a>
+    </div>
+
+</head>
+<body> 
+    <label id="InputLabel">Guess the number 1 - 1000 win a RANDOM prize!</label><br>
+    <p id="IncorrectText"></p>
+    
+
+
+    <div id="InputContainer" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+        <input type="number" id="UserGuess" class="Input"/>
+    </div><br>
+    
+    <div id="containBtn">
+        <label id="disabledText"></label>
+        <button id="GuessBtn" class="button">Guess</button>
+        <button id="HintBtn" class="button">Hint 0/2</button>
+    </div>
+    
+    <div id="PaymentBtns">
+        <button id="MoreHintsBtn" class="button">More Hints $1.00 (Does Not Stack Up)</button>
+    </div>
+        
+    <div id="MoreAttemptsBtnContainer">
+        <button id="InfiniteAttemptsBtn" class="button">100 attempts $20.99</button>
+        <button id="MoreAttemptsBtn" class="button">More attempts $1.25 for 5 (Does Not Stack Up)</button>
+    </div>
+
+    <div id="Checkboxcontainer">
+        <input type="checkbox" id="tosCheckbox">
+        <label for="tosCheckbox" id="CheckboxLabel">I agree to the <a href="terms.html" target="_blank">Terms of Service</a></label>
+    </div>
+      
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1653912159002910"
+     crossorigin="anonymous"></script>
+    
+    <script>const InputLabel = document.getElementById("InputLabel");
+const IncorrectText = document.getElementById("IncorrectText");
+const disabledText = document.getElementById("disabledText");
+const CheckboxLabel = document.getElementById("CheckboxLabel");
+const Guess = document.getElementById("UserGuess");
+const GuessBtn = document.getElementById("GuessBtn");
+const HintBtn = document.getElementById("HintBtn");
+const MoreHintsBtn = document.getElementById("MoreHintsBtn");
+const MoreAttemptsBtn = document.getElementById("MoreAttemptsBtn");
+const InfiniteAttemptsBtn = document.getElementById("InfiniteAttemptsBtn");
+const VideoLink = document.getElementById("YoutubeLink");
+let NumMin = 1
+let NumMax = 1000
+let Answer = Math.floor(Math.random() * NumMax - NumMin + 1) + NumMin;
+let Attempts = 0;
+
+success_url: "http://localhost:5500/index.html?boughtAttempts=true"
+success_url2: "http://localhost:5500/index.html?boughtHints=true"
+success_url3: "http://localhost:5500/index.html?Bought_InfiniteAttempts=true"
+
+const Params4 = new URLSearchParams(window.location.search);
+
+// Check if user bought more attempts
+if (Params4.get("Bought_InfiniteAttempts") === "true") {
+    localStorage.removeItem("lockoutTime");
+    window.alert("Your purchase was successful!");
+    disabledText.textContent = "";
+    Attempts = -95;
+    
+
+}
+
+
+const Params3 = new URLSearchParams(window.location.search);
+
+// Check if user bought more attempts
+if (Params3.get("boughtHints") === "true") {
+    localStorage.removeItem("lockoutTime");
+    window.alert("Your purchase was successful!");
+    disabledText.textContent = "";
+    
+
+}
+
+
+const Params2 = new URLSearchParams(window.location.search);
+
+// Check if user bought more attempts
+if (Params2.get("boughtAttempts") === "true") {
+    localStorage.removeItem("lockoutTime");
+    disabledText.textContent = "";
+    GuessBtn.disabled = false;
+    Attempts = -3;
+}
+
+// Check if user is locked out
+const lockoutTime = localStorage.getItem("lockoutTime");
+if (lockoutTime) {
+    const lockoutDate = new Date(parseInt(lockoutTime));
+    const now = new Date();
+
+    const timeDiff = now.getTime() - lockoutDate.getTime();
+    const twoDays = 2 * 24 * 60 * 60 * 1000;
+
+    if (timeDiff < twoDays) {
+        GuessBtn.disabled = true;
+        disabledText.textContent = "button disabled You must buy more attempts.";
+    } else {
+        // Time passed, unlock
+        localStorage.removeItem("lockoutTime");
+        GuessBtn.disabled = false;
+        disabledText.textContent = "";
+    }
+}
+
+
+
+MoreAttemptsBtn.onclick = function(){
+    let Bought_More_Attempts = document.location.href="https://buy.stripe.com/test_00gbIZ2FNbwO8BG7su";
+}
+
+
+
+MoreHintsBtn.onclick = function(){
+    let Bought_More_Hints = document.location.href="https://buy.stripe.com/test_4gw7sJgwD9oGg483cf";
+
+};
+
+InfiniteAttemptsBtn.onclick = function(){
+    let Bought_InfiniteAttempts = document.location.href="https://buy.stripe.com/test_7sI7sJ94basK6ty004"
+}
+
+
+HintBtn.onclick = function(){
+    if(HintBtn.textContent === "Hint 1/2" && parseInt(Guess.value) > Answer){
+        HintBtn.textContent = "No hints left";
+        window.alert("Hint #2: Your last guess was higher than the number.");
+        window.alert("You have 0 hint remaining.");
+            
+    } else if(HintBtn.textContent === "Hint 1/2" && parseInt(Guess.value) < Answer){
+      HintBtn.textContent = "No hints left";
+      window.alert("Hint #2: Your last guess was lower than the number.");
+      window.alert("You have 0 hints remaining.");
+    
+    } else if(HintBtn.textContent === "Hint 0/2" && parseInt(Guess.value) > Answer){
+      HintBtn.textContent = "Hint 1/2";
+      window.alert("Hint #1: Your last guess was higher than the number.");
+      window.alert("You have 1 hint remaining.");
+            
+    } else if(HintBtn.textContent === "Hint 0/2" && parseInt(Guess.value) < Answer){
+      HintBtn.textContent = "Hint 1/2";
+      window.alert("Hint #1: Your last guess was lower than the number.");
+      window.alert("You have 1 hint remaining.");
+    
+    } else if(HintBtn.textContent === "No hints left"){
+      window.alert("You have no hints left!")
+    }
+
+    
+}
+
+const tosCheckbox = document.getElementById("tosCheckbox");
+const tosContainer = document.getElementById("CheckboxContainer");
+
+if (localStorage.getItem("tosAgreed") === "true") {
+    GuessBtn.disabled = false;
+    disabledText.textContent = "";
+    tosCheckbox.style.display = "none";
+    CheckboxLabel.textContent = "";
+} else {
+    GuessBtn.disabled = true;
+    window.alert("You must agree to the terms of service before play.");
+    disabledText.textContent = "Must agree to terms of service.";
+}
+
+tosCheckbox.onchange = function () {
+    if (tosCheckbox.checked) {
+        localStorage.setItem("tosAgreed", "true");
+        GuessBtn.disabled = false;
+        disabledText.textContent = "";
+        tosCheckbox.style.display = "none";
+        CheckboxLabel.textContent = "";
+    }
+};
+
+GuessBtn.onclick = function(){
+    if(Guess.value == Answer){
+        InputLabel.textContent = `You guessed the number!!! click the link above to claim your prize`;
+        VideoLink.textContent = `Click here to claim prize`
+        IncorrectText.textContent = ``;
+        
+    }   
+
+    else{
+        IncorrectText.textContent = `Incorrect try again`;
+        Attempts+=1;
+        if(Attempts == 2){
+            document.getElementById("GuessBtn").disabled = true;
+            window.alert("Must buy more attempts");
+            disabledText.textContent = "Button disabled must buy more attempts";
+            localStorage.setItem("lockoutTime", Date.now().toString());
+
+
+            }
+        }    
+        
+    }
+      
+
+
+
+   </script><br>
+    <p><a href="terms.html" target="_blank">Terms of Service</a></p>
+    <img src="https://media.licdn.com/dms/image/D4E12AQFnVG7jswiy_w/article-cover_image-shrink_720_1280/0/1677811002897?e=2147483647&v=beta&t=PsdBb0XNaRjFynZGqW-uv8AsrmM8i3z0huXaRD0Z6Vk" width="2700" height="1500" alt="wall of gift cards">
+    <script src="index.js"></script>
+</body>
+</html>
